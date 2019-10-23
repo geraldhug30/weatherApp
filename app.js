@@ -1,9 +1,22 @@
-const request = require('request');
+const app = require('express')();
+const port = 3000 || process.env.PORT;
+//api
 
-const url =
-  'https://api.darksky.net/forecast/985e68495ace6a7341b4e310690f7f3c/37.8267,-122.4233';
+const geocode = require('./utils/mapbox');
+const weather = require('./utils/weather');
 
-request(url, async (error, res) => {
-  const data = JSON.parse(res.body);
-  console.log(data.currently.temperature);
+app.get('/', (req, res) => {
+  geocode('angeles city', (err, data) => {
+    if (err) console.log(err);
+
+    weather(data, (err, result) => {
+      if (err) console.log(err);
+      res.send(data.location + ' : ' + result);
+    });
+  });
+});
+
+app.listen(port, err => {
+  if (err) console.log(err);
+  console.log('app is running on port: ' + port);
 });
