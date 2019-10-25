@@ -1,5 +1,13 @@
+h1 {
+  margin: 2rem;
+  font-size: 5rem;
+}
 form {
   text-align: center;
+}
+
+.container {
+  font-family: 'Roboto', sans-serif;
 }
 .margin-lg {
   width: 80%;
@@ -10,4 +18,8 @@ button.btn-custom {
   text-align: center;
   margin: 0 auto;
   width: 50%;
+}
+.api {
+  font-style: oblique;
+  margin: 3rem auto;
 }

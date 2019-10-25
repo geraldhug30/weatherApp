@@ -16,26 +16,27 @@ app.get('/', (req, res) => {
 
 app.get('/weather', async (req, res) => {
   try {
-    geocode(req.query.address, (err, data) => {
-      if (err) return res.send(err);
+    // sanitize code from client remove character
+    let outString = req.query.address.replace(
+      /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi,
+      ''
+    );
+    if (!outString) {
+      return res.send({ error: 'need input to search' });
+    }
+
+    geocode(outString, (err, data = '') => {
+      if (err) return res.send({ error: err });
+
       weather(data, (err, result) => {
         if (err) return res.send(err);
-        res.send({ ...result, address: req.query.address });
+        res.send({ ...result, address: req.query.address, err });
       });
     });
   } catch (err) {
     res.send({ error: 'unable to process your request' });
   }
 });
-
-// geocode('japan', (err, data) => {
-//   if (err) console.log(err);
-
-//   weather(data, (err, result) => {
-//     if (err) console.log(err);
-//     res.send(data.location + ' : ' + result);
-//   });
-// });
 
 app.listen(port, err => {
   if (err) console.log(err);
